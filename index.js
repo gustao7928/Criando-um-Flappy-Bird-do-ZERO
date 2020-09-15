@@ -90,20 +90,84 @@ const chao = {
 
 
 
+const mensagemGetReady = {
+    sX:134,
+    sY: 0,
+    w: 174,
+    h: 150,
+    x: (canvas.width / 2 )- 174/2,
+    y: 0,
+    desenha() {
+        contexto.drawImage(
+        sprites,
+        mensagemGetReady.sX, mensagemGetReady.sY,
+        mensagemGetReady.w, mensagemGetReady.h,
+        mensagemGetReady.x, mensagemGetReady.y,
+        mensagemGetReady.w, mensagemGetReady.h,
+        );
+    }
+}
 
 
+//
+//[Telas]
+//
+
+let telaAtiva = {};
+function mudaParaTela(novaTela) {
+    telaAtiva = novaTela
+}
+
+const Telas = {
+    INICIO:{
+        desenha() {
+        planoDeFundo.desenha();
+        chao.desenha();
+        flappybird.desenha();
+        mensagemGetReady.desenha();
+        },
+
+        click() {
+        mudaParaTela(Telas.JOGO)            
+        },
+
+        atualiza() {
+
+        }
+    }
+}
+
+Telas.JOGO = {
+    desenha() {
+        planoDeFundo.desenha();
+        chao.desenha();
+        flappybird.desenha();
+    },
+    atualiza() {
+    flappybird.atualiza();
+    }
+}
 
 
 
 function loop() {
     
-    flappybird.atualiza();
-    planoDeFundo.desenha();
-    chao.desenha();
-    flappybird.desenha();
+    telaAtiva.desenha()
+    telaAtiva.atualiza()
 
-
+    
     requestAnimationFrame(loop);
+
+
 }
+ 
+window.addEventListener('click', function () {
+    if (telaAtiva.click) 
+    {
+        telaAtiva.click()
+    }
+})
+
+mudaParaTela(Telas.INICIO)
 
 loop()
